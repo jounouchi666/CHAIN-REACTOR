@@ -1,5 +1,23 @@
 # 完成評価 — 2026-11-07
 
+## 後続追加：SE・取説・静的配布
+
+- 操作SE10種（有効化、配置、配線、取り消し、通電ON/OFF、巻戻し、停止/再開、水）を既存の砲撃・衝突・破断・爆発・接点音へ追加。音切替はcompact設定内から出し、常時操作可能にした。最初は無音、18voice上限は維持。中断後のユーザー操作でAudioContext再開を試すが、実機Safariの成功は保証しない。
+- README更新、MANUAL.mdを新規作成し、同じ原稿からmanual.htmlを生成。操作ガイドのリンクから別タブで開く。DEPLOY.mdと手動専用Pages workflowを準備。公開・push・Actions実行・GitHub設定変更は未実施。
+- 連結した鎖のSVGを作り、16/32px favicon PNG、ICO3サイズ、180px不透明Apple Touch Icon、192/512px、512px maskableとSafari単色SVGを整備。maskableのforegroundが中央80%径のsafe circle内に収まることをpixel検査。
+- 最終Node **38件成功**。build:pages成功。19ファイルだけを_siteへコピーし、HTML/CSS/manifest/Worker参照を検査。実HTTPで全public assetが200、src/evidence/node_modulesは404を確認した。ルートとProject Pages風サブディレクトリのmanifest MIMEも確認。
+- 実ブラウザのOfflineAudioContextで10操作SEを合成し全件PASS、peak .030〜.064（既定音量）。無音時のcueはvoiceを作らない。主観的な聴感の保証ではない。metricsはevidence/publication/se-metrics.json。
+- サブディレクトリの実アプリでSEの明示有効化を確認。SE追加後も320×568 / 375×812 / 414×896 / 768×1024 / 1172×884 / 1280×720 / 1366×768 / 1440×900の8条件で縦横overflow、SEの画面外配置、ボタンラベル切れなし。取説のデスクトップ表示も目視。
+- 今回も全E2E CLIは未実行。既存sound E2Eへ新しい10cue検証を追加し、現行in-app browserのtest harnessで実行した。実機iPhone/Safariでのインストール・音・ファイル保存、初回GitHub Actionsの確認は公開前に必要。オフライン機能は未実装。
+
+## 後続修正：レイアウト
+
+ユーザー指摘を受け、幅だけでなく画面の高さを制約にした。固定の高さ推定を廃止し、header/footer/transportの実際の占有高を引いた領域へCanvasを配置。剛体とpointerの対応を保つためCanvas自体は7:4を維持する。道具railを2列化し、狭幅または高さ700px未満では道具／設定をpopoverへ。設定には既存操作を移すだけで機能を削除しない。
+
+今回の検証：build成功、Node36件成功。in-app browserで1172×884 / 1366×768 / 1280×720 / 1024×768 / 1440×900 / 375×812 / 320×568 / 768×1024 / 414×896の9条件を計測し、ページ縦横overflowなし・footerが画面内・ラベル切れなしを確認。設定popoverの画面内配置とEscape/focus復帰も実操作した。画像と計測JSONは `evidence/layout-fix/`。resize直後に切れたcaptureは採用せず、再描画後に撮り直す。
+
+回帰E2Eを9件追加し、touch試験の視点操作経路を更新。今回Playwright CLIは実行せず、上記の現行in-app browserで同じ受け入れ条件を直接検証した。以下の23件E2E成功記録はこの後続修正前の結果であり、修正後の全E2E成功を主張しない。高さ540px未満は操作領域を潰す代わりに縦スクロールを許可する。
+
 製品入口は `http://127.0.0.1:4191/`。旧作の改造ではなく、独立したローカル実験室。
 
 ## 技術的成功と体験の評価を分ける

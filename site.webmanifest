@@ -1,0 +1,17 @@
+{
+  "id":"./",
+  "name":"CHAIN REACTOR — 連鎖実験室",
+  "short_name":"CHAIN REACTOR",
+  "description":"壊す。戻す。違う一手を試す。物理と回路の連鎖実験室。",
+  "lang":"ja",
+  "start_url":"./",
+  "scope":"./",
+  "display":"standalone",
+  "background_color":"#0e151d",
+  "theme_color":"#0e151d",
+  "icons":[
+    {"src":"./assets/icon-192.png","sizes":"192x192","type":"image/png","purpose":"any"},
+    {"src":"./assets/icon-512.png","sizes":"512x512","type":"image/png","purpose":"any"},
+    {"src":"./assets/icon-maskable-512.png","sizes":"512x512","type":"image/png","purpose":"maskable"}
+  ]
+}

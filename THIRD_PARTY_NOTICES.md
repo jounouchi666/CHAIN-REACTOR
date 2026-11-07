@@ -1,5 +1,7 @@
 # Runtime dependency
 
+Build-only tools added for publication: Sharp 0.35.5 (Apache-2.0, https://github.com/lovell/sharp) rasterizes our SVG; Marked 18.1.3 (MIT, https://github.com/markedjs/marked) renders our manual. They are not shipped as runtime JavaScript in `_site/`. Their package licenses and transitive notices are included in the installed npm packages.
+
 Matter.js 0.20.0 — https://github.com/liabru/matter-js
 
 The MIT License (MIT)

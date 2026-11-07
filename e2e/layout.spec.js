@@ -1,4 +1,20 @@
 import {test,expect} from '@playwright/test';
+for(const [width,height] of [[1172,884],[1366,768],[1280,720],[1024,768],[1440,900],[375,812],[320,568],[768,1024]])test(`controls fit the viewport ${width}x${height}`,async({page})=>{
+  await page.setViewportSize({width,height});await page.goto('/');await expect(page.locator('#stats')).toContainText('部品');
+  const result=await page.evaluate(()=>{
+    const box=e=>e.getBoundingClientRect(),footer=box(document.querySelector('footer')),canvas=box(document.querySelector('canvas'));
+    const clipped=[...document.querySelectorAll('button .button-label')].filter(e=>e.getClientRects().length&&e.scrollWidth>e.clientWidth+1).map(e=>e.textContent);
+    return {scroll:document.documentElement.scrollHeight>innerHeight+1,footerBottom:footer.bottom,ratio:canvas.width/canvas.height,canvasHeight:canvas.height,clipped};
+  });
+  expect(result.scroll).toBe(false);expect(result.footerBottom).toBeLessThanOrEqual(height+1);expect(result.ratio).toBeCloseTo(1.75,1);expect(result.canvasHeight).toBeGreaterThan(70);expect(result.clipped).toEqual([]);
+});
+
+test('compact settings remain reachable, fit the screen, and close with Escape',async({page})=>{
+  await page.setViewportSize({width:320,height:568});await page.goto('/');await page.locator('#settings-toggle').click();
+  await expect(page.getByRole('button',{name:'設計図を保存',exact:true})).toBeVisible();
+  const box=await page.locator('#file-actions').boundingBox();expect(box.x).toBeGreaterThanOrEqual(0);expect(box.y).toBeGreaterThanOrEqual(0);expect(box.y+box.height).toBeLessThanOrEqual(568);
+  await page.keyboard.press('Escape');await expect(page.locator('#file-actions')).toBeHidden();await expect(page.locator('#settings-toggle')).toBeFocused();
+});
 for(const width of [320,375,414,768,1440])test(`studio layout at ${width}px`,async({page},info)=>{
   await page.setViewportSize({width,height:1000});await page.goto('/index.html');
   await expect(page.locator('#stats')).toContainText('部品');

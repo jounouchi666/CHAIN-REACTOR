@@ -2,6 +2,8 @@
 
 壊す。戻す。違う一手を試す。
 
+[ブラウザで遊ぶ](https://jounouchi666.github.io/CHAIN-REACTOR/) · [遊び方・取扱説明書](MANUAL.md) · [GitHub Pages公開手順](DEPLOY.md) · [検証結果](EVALUATION.md)
+
 剛体・破断・熱・爆発・電気・磁場・重力井戸・水と蒸気が同じ実験槽で干渉する、ローカルの連鎖実験室。巻戻し後には上書き前の実測運動を重ねられる。映像を再生しているだけのデモではない。
 
 ## 起動
@@ -38,6 +40,16 @@ npm start
 
 画面内の「操作ガイド」に詳細と限界を記載。ガイド中は時間が止まり、閉じると元の状態へ戻る。音は明示的に開くまで無音。
 
+下部のスピーカーボタンでSEをON/OFF。爆発・衝突・ガラス・砲撃に加え、通電・配置・配線・水・巻戻しをWeb Audioで合成する。音量は設定内。外部音源やBGMは使わない。SEボタンは狭幅でもメニューに隠さない。
+
+狭幅・低い画面では保存、音量、動き軽減、視点操作を下部の「設計と設定」にまとめる。通常は画面内に操作を固定し、実験槽を残りの高さへ合わせる。高さ540px未満では操作性を保つためページスクロールを許可する。
+
+## 静的配布・アイコン
+
+`npm run build:pages` でGitHub Pages用 `_site/` を生成し、`npm run preview:pages` でサブディレクトリ配置を確認できる。`npm run build` はアプリのbundleに加え、SVG原稿からfavicon／180px Apple Touch Icon／192・512px manifest iconsと、`MANUAL.md` からブラウザ用 `manual.html` を生成する。取説は操作ガイドから別タブで開ける。
+
+`.github/workflows/pages.yml` は手動公開用。pushだけでは公開しない。Safari/iOSの実機確認は未実施。オフライン起動は未対応。
+
 ## 検証
 
 ```powershell
@@ -58,4 +70,4 @@ npm run measure
 - 比較は1本。連続した巻戻しでは上書き前の未来を維持し、その記録区間を通過すると解放する。点線は剛体だけで、水の過去分布は重ねない。
 - 弾道ガイドは通常の重力と空気抵抗の自由飛翔。衝突、磁場、重力井戸、水の力を予測しない。
 
-検証結果と自己評価は [EVALUATION.md](EVALUATION.md)、設計判断・失敗した案・改善履歴は [PROJECT.md](PROJECT.md)。旧作は別フォルダ `../before-observation` のlocal commit `6a15e87` に保存済み。このプロジェクトからpush・公開・第三者への送信は行っていない。
+検証結果と自己評価は [EVALUATION.md](EVALUATION.md)、設計判断・失敗した案・改善履歴は [PROJECT.md](PROJECT.md)。

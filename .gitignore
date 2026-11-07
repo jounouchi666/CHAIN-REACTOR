@@ -3,3 +3,5 @@ evidence/
 test-results/
 playwright-report/
 dist/
+_site/
+/manual.html

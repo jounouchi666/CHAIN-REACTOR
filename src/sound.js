@@ -18,6 +18,16 @@ export class MachineSound {
   }
   finish(source,nodes,now,duration){this.voices++;this.active.add(source);source.onended=()=>{this.voices--;this.active.delete(source);source.disconnect();for(const node of nodes)node.disconnect();};source.start(now);source.stop(now+duration+.01);}
   clear(){if(!this.context)return;for(const source of this.active)try{source.stop(this.context.currentTime+.005);}catch{}this.lastImpact=-1;}
+  cue(name,when=this.context?.currentTime){
+    if(!this.enabled||!this.context||this.voices>=14)return;
+    const now=Math.max(this.context.currentTime,when||0);
+    const notes={ready:[440,880,.12,.1],place:[680,350,.055,.08],wire:[640,960,.09,.09],undo:[560,280,.09,.08],powerOn:[80,420,.28,.13],powerOff:[310,65,.2,.12],rewind:[1100,120,.32,.1],pause:[380,330,.06,.07],play:[330,480,.07,.07],water:[900,230,.14,.06]};
+    const note=notes[name];if(!note)return;this.tone(now,...note);
+    if(name==='powerOn'||name==='powerOff')this.burst(now,.13,.08,1300,220);
+    if(name==='water')this.burst(now,.23,.11,2100,500,true);
+    if(name==='rewind')this.burst(now,.25,.055,1500,200);
+    if(name==='ready'||name==='wire')this.tone(now+.06,note[1],note[1],.08,.06);
+  }
   tone(now,start,end,duration,peak=.1){
     if(this.voices>=18)return;
     const o=this.context.createOscillator();o.type='sine';o.frequency.setValueAtTime(start,now);o.frequency.exponentialRampToValueAtTime(Math.max(20,end),now+duration);

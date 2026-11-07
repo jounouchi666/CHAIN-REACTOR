@@ -9,8 +9,9 @@ export function installGuide({onOpen=()=>null,onClose=()=>{}}={}){
   <dt>時間</dt><dd>3秒戻すと停止し、上書き前の記録を1本保持する。「結果を再生」は物理を変えずに記録を見る操作。比較の点線は前回の剛体、停止中の線は位置の差、強調枠は前回より残った爆薬。</dd>
   <dt>視点</dt><dd>ホイール・2本指・拡大縮小ボタン。視点道具でドラッグ、Shiftと矢印でも移動。「視点を戻す」で初期の視点へ戻る。</dd>
   <dt>設計図</dt><dd>保存するのは現在の部品配置・接続・水の分布。速度・燃焼途中・記録映像は保存しない。読込は停止状態から。「再実験」は元の場、または読込直後の設計図へ戻る。再実験・場の切替前は必要な設計を保存すること。</dd>
-  <dt>音と動き</dt><dd>音は明示的に開くまで無音。動き軽減は火花・揺れ・爆圧波・磁場の点を省く。物理運動そのものは続く。</dd>
+  <dt>音と動き</dt><dd>下部のスピーカーボタンでSEを有効化。音量は設定内。動き軽減は火花・揺れ・爆圧波・磁場の点を省く。物理運動そのものは続く。</dd>
   <dt>実験の範囲</dt><dd>制作600部品・全体800部品、接続は各1200本、水は最大70000セル。水は質量保存のセル近似で、工学解析用ではない。記録は直近約30秒、巻戻しは約10〜12秒。大きい場では保存間隔1秒・編集取り消し6段、小さい場は0.25秒・24段。</dd></dl>`;
+  const manual=document.createElement('a');manual.href='./manual.html';manual.target='_blank';manual.rel='noopener';manual.textContent='詳しい取扱説明書を別タブで開く';dialog.append(manual);
   const close=document.createElement('button');labelButton(close,'実験に戻る','back');close.onclick=()=>dialog.close();dialog.insertBefore(close,dialog.children[1]);document.body.append(dialog);
   dialog.addEventListener('keydown',e=>{if(e.key!=='Tab')return;const focusable=[...dialog.querySelectorAll('button:not(:disabled),a[href],input:not(:disabled),select:not(:disabled),[tabindex="0"]')],first=focusable[0],last=focusable.at(-1);if((e.shiftKey&&document.activeElement===first)||(!e.shiftKey&&document.activeElement===last)){e.preventDefault();(e.shiftKey?last:first).focus({preventScroll:true});}});
   const open=document.createElement('button');open.id='help';labelButton(open,'操作ガイド','help');open.setAttribute('aria-haspopup','dialog');open.onclick=()=>{session=onOpen();dialog.showModal();};document.querySelector('#files').append(open);

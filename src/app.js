@@ -25,7 +25,10 @@ function send(command){
   if(pending.size>=64)return Promise.reject(new Error('計算が追い付いていません。少し待って再操作してください'));
   const id=++serial;return new Promise((resolve,reject)=>{pending.set(id,{resolve,reject});worker.postMessage({id,command});});
 }
-function act(command){send(command).then(value=>{if(value?.notice)feedback.textContent=value.notice;}).catch(e=>error(e.message));}
+function act(command){
+  const cue=command.type==='pause'?(state?.playing?'pause':'play'):command.type==='rewind'?'rewind':command.type==='undo'?'undo':command.type==='tool'?(['wire','joint'].includes(command.kind)?'wire':command.kind==='water'?'water':['fire','move','pan'].includes(command.kind)?null:'place'):['rotate','anchor'].includes(command.type)?'place':null;
+  send(command).then(value=>{if(value?.notice)feedback.textContent=value.notice;if(cue)sound.cue(cue);}).catch(e=>error(e.message));
+}
 function button(id,label,action){const b=document.createElement('button');b.id=id;b.textContent=label;b.onclick=action;header.append(b);return b;}
 const scenes=document.createElement('select');scenes.setAttribute('aria-label','実験場');
 for(const s of SCENES){const o=document.createElement('option');o.value=s.id;o.textContent=s.name;scenes.append(o);}header.prepend(scenes);
@@ -79,6 +82,7 @@ worker.onmessage=({data})=>{
   if(data.type==='fatal'){error(`${data.error}。「再実験」で初期化できます`);return;}
   if(data.type!=='state')return;
   const incoming=data.state;
+  if(state&&incoming.revision===state.revision&&!incoming.replaying&&!state.replaying&&incoming.batteryEnabled!==state.batteryEnabled)sound.cue(incoming.batteryEnabled?'powerOn':'powerOff');
   if(!state||incoming.revision!==state.revision||incoming.replaying!==state.replaying){previousState=null;effects.clear();sound.clear();panPoint=null;pendingDrag=null;down=false;touchFire=false;gestureBlocked=false;pinch=null;pointers.clear();}
   else {previousState=state;effects.reduced=reduced.matches||manualReduced;effects.update(Math.max(0,incoming.world.tick-state.world.tick)/120);}
   if(state&&incoming.scene!==state.scene)camera.reset();
@@ -90,10 +94,16 @@ worker.onmessage=({data})=>{
 worker.onerror=event=>{error(`計算機を起動できません: ${event.message}。ページを再読込してください`);for(const p of pending.values())p.reject(new Error('計算機が停止しました'));pending.clear();};
 document.addEventListener('visibilitychange',()=>act({type:'suspend',value:document.hidden}));
 
-const soundButton=button('sound','音を開く',async()=>{
-  try{if(sound.enabled){sound.mute();labelButton(soundButton,'音を開く','sound');}else{await sound.enable();labelButton(soundButton,'無音にする','muted');}soundButton.setAttribute('aria-pressed',String(sound.enabled));}
+function syncSound(){labelButton(soundButton,sound.enabled?'SE ON':'SE OFF',sound.enabled?'sound':'muted');soundButton.setAttribute('aria-pressed',String(sound.enabled));soundButton.setAttribute('aria-label',sound.enabled?'SEを無音にする':'SEを有効にする');soundButton.title=sound.enabled?'SE ON — クリックで無音':'SE OFF — クリックで音を有効化';}
+const soundButton=button('sound','SE OFF',async()=>{
+  try{if(sound.enabled)sound.mute();else{await sound.enable();sound.cue('ready');}syncSound();}
   catch(e){error(`音を開始できません: ${e.message}`);}
 });soundButton.setAttribute('aria-pressed','false');
+syncSound();
+// A foreground gesture can resume Safari's interrupted/suspended context. Never
+// enable sound implicitly; muted sessions remain muted after returning to a tab.
+function resumeAudio(){if(sound.enabled&&sound.context?.state!=='running')sound.context.resume().catch(()=>{});}
+document.addEventListener('pointerdown',resumeAudio,{capture:true});document.addEventListener('keydown',resumeAudio,{capture:true});
 const volume=document.createElement('input');Object.assign(volume,{type:'range',min:'0',max:'.7',step:'.01',value:'.35'});volume.setAttribute('aria-label','音量');volume.oninput=()=>sound.setVolume(volume.value);header.append(volume);
 button('save','設計図を保存',async()=>{
   try{
@@ -171,4 +181,4 @@ function render(now){
   }
   requestAnimationFrame(render);
 }
-arrangeWorkspace();studioUI(tools);installGuide({onOpen:()=>{if(!state?.playing)return null;const session={revision:state.revision,replaying:state.replaying,paused:send({type:'pause'})};session.paused.catch(e=>error(e.message));return session;},onClose:session=>{if(session&&state?.revision===session.revision&&state.replaying===session.replaying)session.paused.then(()=>act({type:'pause'})).catch(()=>{});}});requestAnimationFrame(render);
+arrangeWorkspace();studioUI(tools);syncSound();installGuide({onOpen:()=>{if(!state?.playing)return null;const session={revision:state.revision,replaying:state.replaying,paused:send({type:'pause'})};session.paused.catch(e=>error(e.message));return session;},onClose:session=>{if(session&&state?.revision===session.revision&&state.replaying===session.replaying)session.paused.then(()=>act({type:'pause'})).catch(()=>{});}});requestAnimationFrame(render);

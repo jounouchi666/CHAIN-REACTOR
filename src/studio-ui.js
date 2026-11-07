@@ -27,13 +27,21 @@ export function studioUI(tools){
   toolbar.addEventListener('toggle',()=>picker.setAttribute('aria-expanded',String(toolbar.matches(':popover-open'))));
   for(const [id,name] of [['undo','編集を戻す'],['rotate','狙った部品を15度回転'],['anchor','狙った部品の固定を切替'],['camera-reset','視点を戻す']])document.getElementById(id).setAttribute('aria-label',name);
   const canvas=document.querySelector('canvas'),stage=document.createElement('div');stage.className='canvas-stage';canvas.before(stage);stage.append(canvas);
+  const viewport=document.createElement('div');viewport.className='canvas-viewport';canvas.before(viewport);viewport.append(canvas);
   const viewControls=document.createElement('div');viewControls.className='view-controls';stage.append(viewControls);
-  const compact=matchMedia('(max-width:47.99rem)'),transport=document.querySelector('#transport');
+  const compact=matchMedia('(max-width:63.99rem), (max-height:699px)'),transport=document.querySelector('#transport');
+  const footer=document.querySelector('#files'),fileActions=document.createElement('div');fileActions.id='file-actions';
+  for(const element of [...footer.children])if(!element.matches('[role=status],#sound'))fileActions.append(element);
+  const settings=document.createElement('button');settings.id='settings-toggle';settings.setAttribute('aria-controls','file-actions');settings.setAttribute('aria-expanded','false');labelButton(settings,'設計と設定','save');
+  footer.prepend(settings,fileActions);
+  settings.onclick=()=>fileActions.togglePopover();
+  fileActions.addEventListener('toggle',()=>settings.setAttribute('aria-expanded',String(fileActions.matches(':popover-open'))));
   const ghost=document.querySelector('#ghost');transport.insertBefore(ghost,document.querySelector('#timeline'));
   function adapt(){
     if(toolbar.matches(':popover-open'))toolbar.hidePopover();picker.hidden=!compact.matches;
-    if(compact.matches){toolbar.setAttribute('popover','auto');for(const id of ['camera-reset','zoomIn','zoomOut'])viewControls.append(document.getElementById(id));}
-    else{toolbar.removeAttribute('popover');for(const id of ['camera-reset','zoomIn','zoomOut'])transport.insertBefore(document.getElementById(id),ghost);}
+    if(fileActions.matches(':popover-open'))fileActions.hidePopover();settings.hidden=!compact.matches;
+    if(compact.matches){toolbar.setAttribute('popover','auto');fileActions.setAttribute('popover','auto');for(const id of ['camera-reset','zoomIn','zoomOut'])fileActions.append(document.getElementById(id));}
+    else{toolbar.removeAttribute('popover');fileActions.removeAttribute('popover');for(const id of ['camera-reset','zoomIn','zoomOut'])transport.insertBefore(document.getElementById(id),ghost);}
   }
   compact.addEventListener('change',adapt);adapt();
   const inspector=document.querySelector('#inspector');inspector.hidden=true;

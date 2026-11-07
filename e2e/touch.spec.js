@@ -9,7 +9,7 @@ test('two-finger zoom does not fire the cannon; a single tap does',async({page,c
   await cdp.send('Input.dispatchTouchEvent',{type:'touchMove',touchPoints:[{...a,x:a.x-35},{...b,x:b.x+35}]});
   await cdp.send('Input.dispatchTouchEvent',{type:'touchEnd',touchPoints:[]});
   await expect(page.locator('#stats')).not.toContainText('1.0x');await expect(page.locator('#stats')).toContainText('233 部品');
-  await page.locator('#camera-reset').click();
+  await page.locator('#settings-toggle').click();await page.locator('#camera-reset').click();await page.keyboard.press('Escape');
   await page.touchscreen.tap(box.x+box.width*.5,box.y+box.height*.5);
   await expect(page.locator('#stats')).toContainText('234 部品');
 });

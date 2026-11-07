@@ -2,6 +2,8 @@ import {test,expect} from '@playwright/test';
 import {writeFile} from 'node:fs/promises';
 test('procedural foley renders bounded, distinct signals and honors mute',async({page},info)=>{
   await page.goto('/index.html');
+  const cues=await page.evaluate(async()=>{const {checkCues}=await import('/e2e/audio-check.js');return checkCues();});expect(Object.keys(cues)).toHaveLength(10);
+  await writeFile(info.outputPath('interaction-cues.json'),JSON.stringify(cues,null,2));
   const result=await page.evaluate(async()=>{
     const {MachineSound}=await import('/src/sound.js');
     async function render(muted){

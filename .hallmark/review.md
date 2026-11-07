@@ -1,5 +1,7 @@
 # Product-surface review — 2026-11-07
 
+Layout follow-up · pre-emit critique: P4 H4 E4 S5 R4 V4. Preserve Workbench, palette and SVG system; this is a bounded layout repair, not a new page brief. Height-fit canvas, two-column rail and compact settings replace the prior width-only checks. Current in-app browser evidence covers nine width/height pairs, label overflow, visible footer, settings bounds and Escape/focus return. Below 540px height, page scrolling is intentional rather than clipping operations. New E2E cases are written, not claimed executed in this follow-up.
+
 Scope: `index.html`, `app.css`, `studio.css`, `tokens.css`, the production app and renderer. Historical probe pages are retained experiments, not a second product theme.
 
 Pre-emit critique: P4 H4 E4 S5 R4 V4. The primary surface is the live apparatus; no marketing hero, invented statistics, ornamental background, or fake browser/IDE frame.
