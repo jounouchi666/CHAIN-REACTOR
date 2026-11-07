@@ -1,0 +1,21 @@
+import {test,expect} from '@playwright/test';
+import {SCENES} from '../src/scenes.js';
+for(const scene of SCENES)test(`${scene.id}: power, rewind, blueprint`,async({page},info)=>{
+  const errors=[];page.on('pageerror',e=>errors.push(e.message));
+  await page.goto('/index.html');
+  await page.getByRole('combobox',{name:'実験場',exact:true}).selectOption(scene.id);
+  await page.locator('#power').click();
+  await page.locator('#log-toggle').click();
+  await expect(page.locator('#reaction-log li').first()).toBeVisible({timeout:12000});
+  await expect(page.locator('#stats')).not.toHaveText(/^T[0-9]{1,2} /,{timeout:12000});
+  await page.locator('#pause').click();
+  const tick=()=>page.locator('#stats').textContent().then(s=>Number(s.match(/^T(\d+)/)[1]));
+  const before=await tick();await page.locator('#rewind').click();
+  await expect.poll(tick).toBeLessThan(before);
+  const rewound=await tick();await page.locator('#step').click();await expect.poll(tick).toBe(rewound+1);
+  await page.screenshot({path:info.outputPath('machine.png')});
+  const pending=page.waitForEvent('download');await page.locator('#save').click();const download=await pending;
+  await page.locator('input[type=file]').setInputFiles(await download.path());
+  await expect(page.getByRole('status').filter({hasText:'読込済み'})).toBeVisible();
+  await expect.poll(tick).toBe(0);expect(errors).toEqual([]);
+});

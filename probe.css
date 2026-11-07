@@ -1,0 +1,2 @@
+/* Historical comparison probe, not the production design system. */
+:root{color-scheme:dark;font-family:monospace;background:#101319;color:#e9edf3}body{margin:0}header{display:flex;gap:12px;align-items:center;padding:16px;flex-wrap:wrap}button,select{font:inherit;padding:12px;background:#242c38;color:inherit;border:1px solid #66768c}button:focus-visible,select:focus-visible,canvas:focus-visible{outline:3px solid #ffb24c}canvas{display:block;width:100%;aspect-ratio:7/4;touch-action:none}p{padding:0 16px}output{margin-left:auto}

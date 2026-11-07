@@ -1,0 +1,8 @@
+<!doctype html>
+<html lang="ja"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>CHAIN REACTOR — interaction probes</title>
+<link rel="stylesheet" href="./probe.css">
+<header><strong>操作プローブ / 未完成</strong><select aria-label="比較する案" id="kind"><option value="factory">破断工場</option><option value="reactor">暴走炉</option><option value="ricochet">反射闘技場</option></select><button id="reset">最初へ戻す</button><button id="pause">停止</button><output id="stats"></output></header>
+<p>クリックで衝撃。Shift＋クリックで着火。Spaceで停止。Rで初期状態へ戻す。</p>
+<canvas id="view" width="1400" height="800" tabindex="0" aria-label="三案を比較する物理実験場"></canvas>
+<script type="module" src="./src/probe-app.js"></script></html>

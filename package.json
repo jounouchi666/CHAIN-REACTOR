@@ -1,0 +1,21 @@
+{
+  "name": "chain-reactor",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node --test tests/*.test.js",
+    "test:e2e":"playwright test",
+    "verify":"npm test && npm run build && npm run test:e2e",
+    "measure":"node scripts/compare-interventions.mjs && node scripts/benchmark-coupled.mjs",
+    "start": "node scripts/serve.mjs",
+    "build": "esbuild src/app.js src/worker.js --bundle --format=esm --outdir=dist && esbuild src/foundry-app.js --bundle --format=esm --outfile=dist/foundry.js"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.65.0",
+    "esbuild": "0.28.2"
+  },
+  "dependencies": {
+    "matter-js": "0.20.0"
+  }
+}

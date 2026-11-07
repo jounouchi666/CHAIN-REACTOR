@@ -1,0 +1,17 @@
+:root{
+  color-scheme:dark;
+  --color-paper:oklch(19% .018 255);--color-paper-2:oklch(24% .022 250);--color-paper-3:oklch(30% .025 245);
+  --color-ink:oklch(94% .012 220);--color-muted:oklch(76% .024 230);--color-rule:oklch(60% .033 240);
+  --color-accent:oklch(84% .145 85);--color-accent-ink:oklch(21% .02 65);--color-error:oklch(75% .15 45);--color-focus:var(--color-accent);
+  --color-world-bg:oklch(19% .018 255);--color-world-grid:oklch(26% .03 245);--color-world-major:oklch(32% .03 245);
+  --color-world-steel:oklch(65% .05 235);--color-world-edge:oklch(78% .03 220);--color-world-shadow:oklch(31% .04 245);--color-world-fixed:oklch(32% .04 245);
+  --color-world-fuel:oklch(70% .17 45);--color-world-hot:oklch(96% .08 95);--color-world-ash:oklch(32% .03 45);--color-world-scar:oklch(29% .04 40);
+  --color-world-power:var(--color-accent);--color-world-off:oklch(44% .035 245);--color-world-field:oklch(68% .06 240);--color-world-ink:oklch(24% .025 245);--color-world-text:var(--color-ink);
+  --color-world-water:oklch(65% .09 225);--color-world-steam:oklch(86% .02 225);
+  --color-world-ghost:oklch(85% .12 170);
+  --font-display:'Bahnschrift','Aptos',sans-serif;--font-body:'Aptos','Yu Gothic UI','Meiryo',sans-serif;
+  --space-2xs:4px;--space-xs:8px;--space-sm:12px;--space-md:16px;--space-lg:24px;--space-xl:40px;
+  --text-sm:14px;--text-base:16px;--text-md:20px;--text-lg:25px;
+  --ease-out:cubic-bezier(.16,1,.3,1);--ease-in:cubic-bezier(.7,0,.84,0);--ease-in-out:cubic-bezier(.65,0,.35,1);
+  --dur-micro:100ms;--dur-short:180ms;--radius-control:3px;--rule-width:1px;--z-base:1;--z-raised:10;--z-dropdown:100;--z-modal:400;
+}

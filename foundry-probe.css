@@ -1,0 +1,2 @@
+/* Historical rigid-body probe, retained for reproduction under the local CSP. */
+:root{color-scheme:dark;background:#10141c;color:#e5ecf3;font-family:monospace}body{margin:0}header{display:flex;gap:12px;align-items:center;flex-wrap:wrap;padding:16px}button{font:inherit;padding:12px;background:#273747;color:inherit;border:1px solid #718da0}button[aria-pressed=true]{background:#685220}button:focus-visible,canvas:focus-visible{outline:3px solid #f4ca59}canvas{display:block;width:100%;aspect-ratio:7/4;touch-action:none}p{padding:0 16px}output{margin-left:auto}
